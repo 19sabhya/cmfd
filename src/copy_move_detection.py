@@ -32,6 +32,6 @@ def detect(sourceDirectory, fileName, outputDirectory, blockSize=32):
         return
 
     singleImage = image_object.image_object(sourceDirectory, fileName, blockSize, outputDirectory)
-    imageResultPath = singleImage.run()
+    count = singleImage.run()
 
-    return imageResultPath
+    return count
