@@ -1,5 +1,3 @@
-# Implementation derived from vasiliauskas.agnius@gmail.com
-
 import sys
 from PIL import Image, ImageFilter, ImageDraw
 import operator as op
@@ -97,7 +95,10 @@ def similarparts(imagparts, opt):
 
 def clusterparts(parts, block_len, opt):
  parts = sorted(parts, key=op.itemgetter(-1))
- clusters = [[parts[0][-1]]]
+ if not parts:
+  clusters = []
+ else:
+  clusters = [[parts[0][-1]]]
 
  # assign all parts to clusters
  for i in range(1,len(parts)):
@@ -165,5 +166,6 @@ def detect(input, opt, args):
     out = input.split('.')[0] + '_analyzed.jpg'
     im.save(out)
     identical_regions = len(cparts) if int(opt.imauto) else 0
-    print('\tCopy-move output is saved in file -', out)
+    if(identical_regions):
+      print('\tCopy-move output is saved in file -', out)
     return(identical_regions)
