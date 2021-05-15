@@ -1,3 +1,5 @@
+# Implementation derived from vasiliauskas.agnius@gmail.com
+
 import sys
 from PIL import Image, ImageFilter, ImageDraw
 import operator as op
@@ -95,10 +97,7 @@ def similarparts(imagparts, opt):
 
 def clusterparts(parts, block_len, opt):
  parts = sorted(parts, key=op.itemgetter(-1))
- if not parts:
-  clusters = []
- else:
-  clusters = [[parts[0][-1]]]
+ clusters = [[parts[0][-1]]]
 
  # assign all parts to clusters
  for i in range(1,len(parts)):
@@ -151,8 +150,8 @@ def marksimilar(image, clust, size, opt):
    for cl in clust:
     cx1 = min([cx for cx,cy in cl])
     cy1 = min([cy for cx,cy in cl])
-    cx2 = max([cx for cx,cy in cl]) + block_len
-    cy2 = max([cy for cx,cy in cl]) + block_len
+    cx2 = max([cx for cx,cy in cl]) + size
+    cy2 = max([cy for cx,cy in cl]) + size
     draw.rectangle([cx1,cy1,cx2,cy2],outline="magenta")
  return image
 
@@ -166,6 +165,6 @@ def detect(input, opt, args):
     out = input.split('.')[0] + '_analyzed.jpg'
     im.save(out)
     identical_regions = len(cparts) if int(opt.imauto) else 0
-    if(identical_regions):
+    if(identical_regions != 0):
       print('\tCopy-move output is saved in file -', out)
     return(identical_regions)
