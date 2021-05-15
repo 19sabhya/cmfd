@@ -161,6 +161,7 @@ class image_object(object):
 
     def reconstruct(self):
         print("\tStep 4 of 4: Image reconstruction")
+        count = 0
 
         # create an array as the canvas of the final image
         groundtruthImage = np.zeros((self.imageHeight, self.imageWidth))
@@ -171,6 +172,7 @@ class image_object(object):
             if self.offsetDictionary[key].__len__() < self.Nf * 2:
                 break
             print('\t', key, self.offsetDictionary[key].__len__())
+            count += 1
             for i in range(self.offsetDictionary[key].__len__()):
                 # The original image (grayscale)
                 for j in range(self.offsetDictionary[key][i][1],
@@ -229,7 +231,7 @@ class image_object(object):
                         linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate, 1] = 255
 
         timeStamp = time.strftime("%Y%m%d_%H%M%S")
-        scipy.misc.imsave(self.imageOutputDirectory + timeStamp + "_" + self.imagePath, groundtruthImage)
-        scipy.misc.imsave(self.imageOutputDirectory + timeStamp + "_lined_" + self.imagePath, linedImage)
+        imageio.imwrite(self.imageOutputDirectory + (timeStamp + "_" + self.imagePath), groundtruthImage)
+        imageio.imwrite(self.imageOutputDirectory + (timeStamp + "_lined_" + self.imagePath), linedImage)
 
-        return self.imageOutputDirectory + timeStamp + "_lined_" + self.imagePath
+        return count
