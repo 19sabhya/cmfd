@@ -2,7 +2,7 @@ from PIL import Image
 from math import pow
 from tqdm import tqdm, trange
 
-import scipy.misc
+import imageio
 import numpy as np
 import builtins
 import time
