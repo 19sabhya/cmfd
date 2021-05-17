@@ -160,8 +160,8 @@ def detect(input, opt, args):
     dparts = similarparts(lparts, opt)
     cparts = clusterparts(dparts, block_len, opt) if int(opt.imauto) else [[elem[-1] for elem in dparts]]
     im = marksimilar(im, cparts, block_len, opt)
-    out = input.split('.')[0] + '_analyzed.jpg'
-    im.save(out)
+    out = input.rsplit('//')[2] + '_analyzed.jpg'
+    im.save('..//images//' + out)
     identical_regions = len(cparts) if int(opt.imauto) else 0
     if(identical_regions != 0):
       print('\tCopy-move output is saved in file -', out)
