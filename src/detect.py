@@ -25,27 +25,27 @@ if __name__ == '__main__':
         sys.exit()
     im_str = args[0]
 
-    print('\nRunning double jpeg compression detection...')
+    print('\nIs double compressed: ')
     double_compressed = double_jpeg_compression.detect('..//images//' + im_str)
 
-    if(double_compressed): print('\nDouble compression detected')
-    else: print('\nSingle compressed')
+    if(double_compressed): print('\tTRUE')
+    else: print('\tFALSE')
 
-    print('\nRunning CFA artifact detection...\n')
-    identical_regions_cfa = copy_move_cfa.detect('..//images//' + im_str, opt, args)
-    print('\n' + identical_regions_cfa, 'CFA artifacts detected')
-
-    print('\nRunning noise variance inconsistency detection...')
+    print('\nNoise variance inconsistency detected: ')
     noise_forgery = noise_variance.detect('..//images//' + im_str)
 
-    if(noise_forgery): print('\nNoise variance inconsistency detected')
-    else: print('\nNo noise variance inconsistency detected')
+    if(noise_forgery): print('\tTRUE')
+    else: print('\tFALSE')
 
-    print('\nRunning copy-move detection...\n')
-    copy_move_detection.detect('../images/', im_str, '../output/', blockSize=32)
-    print(identical_regions_cfa, 'identical regions detected')
+    print('\nCopy-move regions found: ')
+    #print('\nRunning CFA artifact detection...\n')
+    identical_regions_cfa = copy_move_cfa.detect('..//images//' + im_str, opt, args)
+    print('\n', identical_regions_cfa, 'CFA artifacts detected')
 
-    if ((not double_compressed) and (identical_regions_cfa == 0) and (not noise_forgery)):
+    count_cmf = copy_move_detection.detect('../images/', im_str, '../output/', blockSize=32)
+    print(count_cmf, 'identical regions detected')
+
+    if ((not double_compressed) and (identical_regions_cfa == 0) and (not noise_forgery) and (count_cmf == 0)):
         print('\nNo forgeries were detected - this image has probably not been tampered with.')
     else:
         print('\nSome forgeries were detected - this image may have been tampered with.')
