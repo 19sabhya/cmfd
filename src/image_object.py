@@ -12,7 +12,7 @@ import blocks
 
 class image_object(object):
     def __init__(self, imageDirectory, imageName, blockDimension, outputDirectory):
-        print("\tStep 1 of 4: Object and variable initialization")
+        #print("\tStep 1 of 4: Object and variable initialization")
 
         # image parameter
         self.imageOutputDirectory = outputDirectory
@@ -24,8 +24,7 @@ class image_object(object):
             self.isThisRGBImage = True
             self.imageData = self.imageData.convert('RGB')
             RGBImagePixels = self.imageData.load()
-            self.imageGrayscale = self.imageData.convert(
-                'L')  # creates a grayscale version of current image to be used later
+            self.imageGrayscale = self.imageData.convert('L')  # creates a grayscale version of current image to be used later
             GrayscaleImagePixels = self.imageGrayscale.load()
 
             for yCoordinate in range(0, self.imageHeight):
@@ -37,7 +36,7 @@ class image_object(object):
             self.isThisRGBImage = False
             self.imageData = self.imageData.convert('L')
 
-        # algorithm's parameters from the first paper
+        # algorithm's parameters 
         self.N = self.imageWidth * self.imageHeight
         self.blockDimension = blockDimension
         self.b = self.blockDimension * self.blockDimension
@@ -46,7 +45,6 @@ class image_object(object):
         self.Nf = 188  # minimum treshold of the offset's frequency
         self.Nd = 50  # minimum treshold of the offset's magnitude
 
-        # algorithm's parameters from the second paper
         self.P = (1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125)
         self.t1 = 2.80
         self.t2 = 0.02
@@ -67,7 +65,7 @@ class image_object(object):
         timestampAfterSorting = time.time()
         self.analyze()
         timestampAfterAnalyze = time.time()
-        imageResultPath = self.reconstruct()
+        count = self.reconstruct()
         timestampAfterImageCreation = time.time()
 
         print("\tComputing time :", timestampAfterComputing - startTimestamp, "seconds")
@@ -79,10 +77,10 @@ class image_object(object):
         totalMinute, totalSecond = divmod(totalRunningTimeInSecond, 60)
         totalHour, totalMinute = divmod(totalMinute, 60)
         print("\tTotal time    : %d:%02d:%02d second" % (totalHour, totalMinute, totalSecond), '\n')
-        return imageResultPath
+        return count
 
     def compute(self):
-        print("\tStep 2 of 4: Computing characteristic features")
+        #print("\tStep 2 of 4: Computing characteristic features")
 
         imageWidthOverlap = self.imageWidth - self.blockDimension
         imageHeightOverlap = self.imageHeight - self.blockDimension
@@ -91,8 +89,7 @@ class image_object(object):
             for i in tqdm(range(0, imageWidthOverlap + 1, 1)):
                 for j in range(0, imageHeightOverlap + 1, 1):
                     imageBlockRGB = self.imageData.crop((i, j, i + self.blockDimension, j + self.blockDimension))
-                    imageBlockGrayscale = self.imageGrayscale.crop(
-                        (i, j, i + self.blockDimension, j + self.blockDimension))
+                    imageBlockGrayscale = self.imageGrayscale.crop((i, j, i + self.blockDimension, j + self.blockDimension))
                     imageBlock = blocks.blocks(imageBlockGrayscale, imageBlockRGB, i, j, self.blockDimension)
                     self.featurescontainer.addBlock(imageBlock.computeBlock())
         else:
@@ -106,7 +103,7 @@ class image_object(object):
         self.featurescontainer.sortFeatures()
 
     def analyze(self):
-        print("\tStep 3 of 4:Pairing image blocks")
+        #print("\tStep 3 of 4:Pairing image blocks")
         z = 0
         time.sleep(0.1)
         featurecontainerLength = self.featurescontainer.getLength()
@@ -160,15 +157,14 @@ class image_object(object):
             self.offsetDictionary[pairOffset] = [firstCoordinate, secondCoordinate]
 
     def reconstruct(self):
-        print("\tStep 4 of 4: Image reconstruction")
+        #print("\tStep 4 of 4: Image reconstruction")
         count = 0
 
         # create an array as the canvas of the final image
         groundtruthImage = np.zeros((self.imageHeight, self.imageWidth))
         linedImage = np.array(self.imageData.convert('RGB'))
 
-        for key in sorted(self.offsetDictionary, key=lambda key: builtins.len(self.offsetDictionary[key]),
-                          reverse=True):
+        for key in sorted(self.offsetDictionary, key=lambda key: builtins.len(self.offsetDictionary[key]), reverse=True):
             if self.offsetDictionary[key].__len__() < self.Nf * 2:
                 break
             print('\t', key, self.offsetDictionary[key].__len__())
@@ -230,8 +226,8 @@ class image_object(object):
                     elif groundtruthImage[xCoordinate + 1, yCordinate] == 0:
                         linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate, 1] = 255
 
-        timeStamp = time.strftime("%Y%m%d_%H%M%S")
-        imageio.imwrite(self.imageOutputDirectory + (timeStamp + "_" + self.imagePath), groundtruthImage)
-        imageio.imwrite(self.imageOutputDirectory + (timeStamp + "_lined_" + self.imagePath), linedImage)
+       # timeStamp = time.strftime("%Y%m%d_%H%M%S")
+        imageio.imwrite(self.imageOutputDirectory + ("_" + self.imagePath), groundtruthImage)
+        imageio.imwrite(self.imageOutputDirectory + ("_lined_" + self.imagePath), linedImage)
 
         return count
