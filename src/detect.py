@@ -40,10 +40,17 @@ if __name__ == '__main__':
     print('\nCopy-move regions found: ')
     #print('\nRunning CFA artifact detection...\n')
     identical_regions_cfa = copy_move_cfa.detect('..//images//' + im_str, opt, args)
-    print('\n', identical_regions_cfa, 'CFA artifacts detected')
+    #print('\n', identical_regions_cfa, 'CFA artifacts detected')
 
     count_cmf = copy_move_detection.detect('../images/', im_str, '../output/', blockSize=32)
-    print(count_cmf, 'identical regions detected')
+    if(identical_regions_cfa != 0):
+        if(count_cmf != 0):
+            print(count_cmf, 'identical regions detected')
+            identical_regions_cfa = 0
+            if(count_cmf == 0):
+                print(identical_regions_cfa, 'identical regions detected')
+    else:
+        print(count_cmf, 'identical regions detected')
 
     if ((not double_compressed) and (identical_regions_cfa == 0) and (not noise_forgery) and (count_cmf == 0)):
         print('\nNo forgeries were detected - this image has probably not been tampered with.')
