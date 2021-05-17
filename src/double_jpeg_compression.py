@@ -62,8 +62,8 @@ def detect(input):
 
         for j in indices:
             if rotz[j][0]>thres: peak_count+=1
-
+        
         if(k==3):
-            if peak_count>=20: return True
+            if peak_count>=50: return True
             else: return False
             flag = False
