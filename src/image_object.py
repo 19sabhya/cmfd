@@ -37,13 +37,13 @@ class image_object(object):
             self.imageData = self.imageData.convert('L')
 
         # algorithm's parameters 
-        self.N = self.imageWidth * self.imageHeight
-        self.blockDimension = blockDimension
-        self.b = self.blockDimension * self.blockDimension
-        self.Nb = (self.imageWidth - self.blockDimension + 1) * (self.imageHeight - self.blockDimension + 1)
+        self.N = self.imageWidth * self.imageHeight # size of image
+        self.blockDimension = blockDimension # number of pixel/ size of block
+        self.b = self.blockDimension * self.blockDimension # block of mentioned size taken from image
+        self.Nb = (self.imageWidth - self.blockDimension + 1) * (self.imageHeight - self.blockDimension + 1) # number of blocks of siz b
         self.Nn = 2  # amount of neighboring block to be evaluated
-        self.Nf = 188  # minimum treshold of the offset's frequency
-        self.Nd = 50  # minimum treshold of the offset's magnitude
+        self.Nf = 188  # minimum treshold of the frequency
+        self.Nd = 50  # minimum treshold of the offset
 
         self.P = (1.80, 1.80, 1.80, 0.0125, 0.0125, 0.0125, 0.0125)
         self.t1 = 2.80
