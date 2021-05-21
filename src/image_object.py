@@ -18,7 +18,7 @@ class image_object(object):
         self.imageOutputDirectory = outputDirectory
         self.imagePath = imageName
         self.imageData = Image.open(imageDirectory + imageName)
-        self.imageWidth, self.imageHeight = self.imageData.size  # height = vertikal, width = horizontal
+        self.imageWidth, self.imageHeight = self.imageData.size  # height = vertical, width = horizontal
 
         if self.imageData.mode != 'L':  # L means grayscale
             self.isThisRGBImage = True
@@ -121,7 +121,7 @@ class image_object(object):
             iFeature = self.featurescontainer.container[firstBlock][1]
             jFeature = self.featurescontainer.container[secondBlock][1]
 
-            # check the validity of characteristic features according to the second paper
+            # check the validity of characteristic features 
             if abs(iFeature[0] - jFeature[0]) < self.P[0]:
                 if abs(iFeature[1] - jFeature[1]) < self.P[1]:
                     if abs(iFeature[2] - jFeature[2]) < self.P[2]:
@@ -129,19 +129,15 @@ class image_object(object):
                             if abs(iFeature[4] - jFeature[4]) < self.P[4]:
                                 if abs(iFeature[5] - jFeature[5]) < self.P[5]:
                                     if abs(iFeature[6] - jFeature[6]) < self.P[6]:
-                                        if abs(iFeature[0] - jFeature[0]) + abs(iFeature[1] - jFeature[1]) + abs(
-                                                        iFeature[2] - jFeature[2]) < self.t1:
-                                            if abs(iFeature[3] - jFeature[3]) + abs(iFeature[4] - jFeature[4]) + abs(
-                                                            iFeature[5] - jFeature[5]) + abs(
-                                                        iFeature[6] - jFeature[6]) < self.t2:
+                                        if abs(iFeature[0] - jFeature[0]) + abs(iFeature[1] - jFeature[1]) + abs(iFeature[2] - jFeature[2]) < self.t1:
+                                            if abs(iFeature[3] - jFeature[3]) + abs(iFeature[4] - jFeature[4]) + abs(iFeature[5] - jFeature[5]) + abs(iFeature[6] - jFeature[6]) < self.t2:
 
                                                 # compute the pair's offset
                                                 iCoordinate = self.featurescontainer.container[firstBlock][0]
                                                 jCoordinate = self.featurescontainer.container[secondBlock][0]
 
                                                 # Non Absolute Robust Detection Method
-                                                offset = (
-                                                    iCoordinate[0] - jCoordinate[0], iCoordinate[1] - jCoordinate[1])
+                                                offset = (iCoordinate[0] - jCoordinate[0], iCoordinate[1] - jCoordinate[1])
 
                                                 # compute the pair's magnitude
                                                 magnitude = np.sqrt(pow(offset[0], 2) + pow(offset[1], 2))
@@ -181,14 +177,14 @@ class image_object(object):
         for xCoordinate in range(2, self.imageHeight - 2):
             for yCordinate in range(2, self.imageWidth - 2):
                 if groundtruthImage[xCoordinate, yCordinate] == 255 and \
-                        (groundtruthImage[xCoordinate + 1, yCordinate] == 0 or groundtruthImage[
-                                xCoordinate - 1, yCordinate] == 0 or
-                                 groundtruthImage[xCoordinate, yCordinate + 1] == 0 or groundtruthImage[
-                            xCoordinate, yCordinate - 1] == 0 or
-                                 groundtruthImage[xCoordinate - 1, yCordinate + 1] == 0 or groundtruthImage[
-                                xCoordinate + 1, yCordinate + 1] == 0 or
-                                 groundtruthImage[xCoordinate - 1, yCordinate - 1] == 0 or groundtruthImage[
-                                xCoordinate + 1, yCordinate - 1] == 0):
+                        (groundtruthImage[xCoordinate + 1, yCordinate] == 0 or 
+                         groundtruthImage[xCoordinate - 1, yCordinate] == 0 or
+                         groundtruthImage[xCoordinate, yCordinate + 1] == 0 or 
+                         groundtruthImage[xCoordinate, yCordinate - 1] == 0 or
+                         groundtruthImage[xCoordinate - 1, yCordinate + 1] == 0 or 
+                         groundtruthImage[xCoordinate + 1, yCordinate + 1] == 0 or
+                         groundtruthImage[xCoordinate - 1, yCordinate - 1] == 0 or 
+                         groundtruthImage[xCoordinate + 1, yCordinate - 1] == 0):
 
                     # creating the edge line, respectively left-upper, right-upper, left-down, right-down
                     if groundtruthImage[xCoordinate - 1, yCordinate] == 0 and \
@@ -216,7 +212,7 @@ class image_object(object):
                         linedImage[xCoordinate, yCordinate + 1:yCordinate + 3, 1] = 255
                         linedImage[xCoordinate + 1:xCoordinate + 3, yCordinate + 1:yCordinate + 3, 1] = 255
 
-                    # creating the straigh line, respectively upper, down, left, right line
+                    # creating the straight line, respectively upper, down, left, right line
                     elif groundtruthImage[xCoordinate, yCordinate + 1] == 0:
                         linedImage[xCoordinate, yCordinate + 1:yCordinate + 3, 1] = 255
                     elif groundtruthImage[xCoordinate, yCordinate - 1] == 0:
