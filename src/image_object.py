@@ -49,7 +49,7 @@ class image_object(object):
         self.t1 = 2.80
         self.t2 = 0.02
 
-        print('\t', self.Nb, self.isThisRGBImage)
+        print('\tno. of overlapping blocks in image: ', self.Nb, 'is img rgb: ', self.isThisRGBImage)
 
         # container initialization to later contains several data
         self.featurescontainer = container.container()
@@ -107,14 +107,13 @@ class image_object(object):
         z = 0
         time.sleep(0.1)
         featurecontainerLength = self.featurescontainer.getLength()
-        for i in tqdm(range(featurecontainerLength)):
-            for j in range(i + 1, featurecontainerLength):
+        for i in tqdm(range(featurecontainerLength - 1)):
+                j = i + 1
+                #print('i,j: ', i, j)
                 result = self.isValid(i, j)
                 if result[0]:
                     self.addDict(self.featurescontainer.container[i][0], self.featurescontainer.container[j][0], result[1])
                     z += 1
-                else:
-                    break
 
     def isValid(self, firstBlock, secondBlock):
         if abs(firstBlock - secondBlock) < self.Nn:
@@ -137,7 +136,12 @@ class image_object(object):
                                                 jCoordinate = self.featurescontainer.container[secondBlock][0]
 
                                                 # Non Absolute Robust Detection Method
-                                                offset = (iCoordinate[0] - jCoordinate[0], iCoordinate[1] - jCoordinate[1])
+                                                if(iCoordinate[0] - jCoordinate[0] > 0 ):
+                                                  offset = (iCoordinate[0] - jCoordinate[0], iCoordinate[1] - jCoordinate[1])
+                                                elif(iCoordinate[0] - jCoordinate[0] < 0):
+                                                  offset = (jCoordinate[0] - iCoordinate[0], jCoordinate[1] - iCoordinate[1])
+                                                else:
+                                                  offset = (0, abs(iCoordinate[1] - jCoordinate[1]))
 
                                                 # compute the pair's magnitude
                                                 magnitude = np.sqrt(pow(offset[0], 2) + pow(offset[1], 2))
