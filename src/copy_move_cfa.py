@@ -150,7 +150,7 @@ def marksimilar(image, clust, size, opt):
     cy1 = min([cy for cx,cy in cl])
     cx2 = max([cx for cx,cy in cl]) + size
     cy2 = max([cy for cx,cy in cl]) + size
-    draw.rectangle([cx1,cy1,cx2,cy2],outline="magenta")
+    draw.rectangle([cx1,cy1,cx2,cy2],outline="green")
  return image
 
 def detect(input, opt, args):
@@ -163,6 +163,4 @@ def detect(input, opt, args):
     out = input.rsplit('//')[2] + '_analyzed.jpg'
     im.save('..//images//' + out)
     identical_regions = len(cparts) if int(opt.imauto) else 0
-    if(identical_regions != 0):
-      print('\tCopy-move output is saved in file -', out)
     return(identical_regions)
