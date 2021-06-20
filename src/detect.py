@@ -1,4 +1,3 @@
-import cv2
 import sys
 
 import double_jpeg_compression
